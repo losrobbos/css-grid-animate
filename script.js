@@ -16,50 +16,50 @@ const filterItems = (event) => {
   // event.target => das ITEM, dass das Event getriggert hat!
   const type = event.target.dataset.type;
 
-  // Step 4: Hole alle SECTIONS als Liste
+  // STEP 4: Hole alle SECTIONS als Liste
   // querySelectorAll holt MEHRERE Items
   const sections = document.querySelectorAll("section");
 
-  // snapshot positions of all sections (=> absolute)
+  // STEP 5: "Recorde" absolute (!) Positions von allen Sections mit GSAP Flip
   const stateSections = Flip.getState(sections);
 
-  // STEP 5: Verschiebe erstes Item aus der Liste an letzte Stelle!
-  // mit sections[0] komme ich an ERSTE Section heran
-  // mit sections[2] => DRITTE Section, usw
-  // mit sections[sections.length-1] => LETZTE Section im Grid
-  // grid.append(sections[0]);
-
+  // STEP 5: Filtere Items
+  // if case: ALL Button gedrückt (= Button hat kein data attribute) 
+    // => setze ALLE Items zurück 
+  // else if case: Check ob Item das gesucht ist => wenn ja: setze display block (visible)
+  // else case: Item is nicht das gesuchte => setze display:none (hide) 
   sections.forEach((section) => {
     console.log(section.dataset.type);
+
     // checke ob button KEIN Data Attribute hat
-    // => heißt: ALLE Items anzeigen!
+    // => heißt: ALL Button wurde geklickt
     if (!event.target.dataset.type) {
       section.style.display = "block";
     }
 
-    // du bist nicht das Item, dass wir wollen => RAUS!
-    else if (section.dataset.type !== type) {
-      section.style.display = "none";
-    }
     // du BIST das Item, dass wir wollen => REIN!
-    else {
+    else if (section.dataset.type === type) {
       section.style.display = "block";
+    }
+    // du bist nicht das Item, dass wir wollen => RAUS!
+    else {
+      section.style.display = "none";
     }
   });
 
-  // Teste ob Flip Plugin in JS geladen wurde
-  // console.log(Flip);
+  // animiere items von voriger position zu neuer position mit Flip.from  
   Flip.from(stateSections, {
     duration: 1,
     ease: "power1.inOut",
     absolute: true,
+    // handles elements that are fading IN (= were set to display:block)
     onEnter: (elements) =>
       gsap.fromTo(
         elements,
         { scale: 0, opacity: 0 },
         { scale: 1, opacity: 1, duration: 0.5, delay: 0.5 }
       ),
-    // // handles elements that are fading out (= were set to display:none)
+    // handles elements that are fading OUT (= were set to display:none)
     onLeave: (elements) =>
       gsap.to(elements, { scale: 0, opacity: 0, duration: 0.5 }),
   });
