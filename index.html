@@ -31,12 +31,12 @@
         Erst wenn es nächstes Mal wieder gleich klappt,
         vergebe ich dir!
       */
-      background-color: goldenrod;
+      background-color: lime;
     }
-
+    
     /*  */
     section[data-type=actual] {
-      background-color: lime;
+      background-color: goldenrod;
     }
 
     .actions {
@@ -45,9 +45,14 @@
 
     button {
       padding: .5rem 2rem;
-      background-color: lime;
       cursor: pointer;
       font-weight: bold;
+    }
+    .btn-ex {
+      background-color: lime;
+    }
+    .btn-actual {
+      background-color: goldenrod;
     }
   </style>
 </head>
@@ -57,9 +62,10 @@
   <h2>Polyamore Sections</h2>
 
   <div class="actions">
-    <button>Move It</button>
-    <!-- <button>Ex</button>
-    <button>Actual</button> -->
+    <!-- <button>Move It</button> -->
+    <button data-type="">Alle</button>
+    <button data-type="ex" class="btn-ex">Ex</button>
+    <button data-type="actual" class="btn-actual">Actual</button>
   </div>
 
   <main>

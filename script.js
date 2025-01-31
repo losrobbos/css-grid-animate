@@ -7,12 +7,14 @@ gsap.registerPlugin(Flip);
 const grid = document.querySelector("main");
 
 // Step 2: Hole BUTTON und speicher in Variable
-const button = document.querySelector("button");
+const buttonAll = document.querySelector("button"); // ALL Button
+const buttonEx = document.querySelector("button[data-type=ex]"); // EX Button
+const buttonActual = document.querySelector("button[data-type=actual"); // Actual Button
 
-// Step 3: Mache Button KLICKBAR => added EVENT onclick zu Button!
-// hänge eine JavaScript FUNCTION in das onclick event
-// Function: () => {...}
-button.onclick = () => {
+const filterItems = (event) => {
+  // event => das was passiert ist: onclick
+  // event.target => das ITEM, dass das Event getriggert hat!
+  const type = event.target.dataset.type;
 
   // Step 4: Hole alle SECTIONS als Liste
   // querySelectorAll holt MEHRERE Items
@@ -28,8 +30,20 @@ button.onclick = () => {
   // grid.append(sections[0]);
 
   sections.forEach((section) => {
-    if (section.dataset.type == "ex") {
+    console.log(section.dataset.type);
+    // checke ob button KEIN Data Attribute hat
+    // => heißt: ALLE Items anzeigen!
+    if (!event.target.dataset.type) {
+      section.style.display = "block";
+    }
+
+    // du bist nicht das Item, dass wir wollen => RAUS!
+    else if (section.dataset.type !== type) {
       section.style.display = "none";
+    }
+    // du BIST das Item, dass wir wollen => REIN!
+    else {
+      section.style.display = "block";
     }
   });
 
@@ -39,17 +53,22 @@ button.onclick = () => {
     duration: 1,
     ease: "power1.inOut",
     absolute: true,
-    // onEnter: (elements) =>
-    //   gsap.fromTo(
-    //     elements,
-    //     { scale: 0, opacity: 0 },
-    //     { scale: 1, opacity: 1, duration: 0.5, delay: 0.5 }
-    //   ),
+    onEnter: (elements) =>
+      gsap.fromTo(
+        elements,
+        { scale: 0, opacity: 0 },
+        { scale: 1, opacity: 1, duration: 0.5, delay: 0.5 }
+      ),
     // // handles elements that are fading out (= were set to display:none)
     onLeave: (elements) =>
       gsap.to(elements, { scale: 0, opacity: 0, duration: 0.5 }),
   });
 };
+
+// führe SELBE FUNCTION beim Klick aus, bei verschiedenen Buttons
+buttonActual.onclick = filterItems;
+buttonEx.onclick = filterItems;
+buttonAll.onclick = filterItems;
 
 // ** For Fun: Füge neues Element ins Grid ein
 // const divNew = document.createElement("section")
